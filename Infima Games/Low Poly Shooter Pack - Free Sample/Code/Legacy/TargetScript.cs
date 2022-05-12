@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
 public class TargetScript : MonoBehaviour {  // Script Enemy + animation + Health Enemy
 
@@ -9,6 +10,9 @@ public class TargetScript : MonoBehaviour {  // Script Enemy + animation + Healt
 	
 	//Used to check if the target has been hit
 	public bool isHit = false; // boollin Enemy true vs false
+	[Header("Enemy AI")]
+	public GameObject player;
+	NavMeshAgent enemy;
 	Animator anim; 
 
 
@@ -16,12 +20,16 @@ public class TargetScript : MonoBehaviour {  // Script Enemy + animation + Healt
 
 		health = maxHealth; 
         anim = GetComponent<Animator>(); // animator enemy
+		enemy = GetComponent<NavMeshAgent>(); // Enemy AI
+		player = GameObject.FindWithTag("Player");
 	}
 
 	
 
 
 	private void Update () {
+
+		enemy.SetDestination(player.transform.position);
 		
 		//If the target is hit
 		if (isHit == true) 
@@ -48,6 +56,7 @@ public class TargetScript : MonoBehaviour {  // Script Enemy + animation + Healt
 	{
 		yield return new WaitForSeconds(3);
 		Destroy(gameObject); // Destroy Enemy
+		enemy.speed = 0f;
 	}
 
 }
